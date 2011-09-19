@@ -1,0 +1,26 @@
+struct node:
+	predominant_class
+	positive example count
+		
+
+def main():
+	dataList = read(trainFile)
+	tree = split(dataList, splitFunction)
+
+	#record in each leaf node the predominant class of the examples in the leaf node
+
+	#Print out the tree, including the attribute-values for each split and the number of positive and negative examples at each leaf node.
+	#JD - won't a leaf node only have postitve or negative examples? Maybe not...
+	print (tree)
+	pruneLeaves(tree) # Free the memory for the linked lists at the leaf nodes. 
+
+	dataList = read(testFile)
+	filter(tree, datalist)
+
+	print CorrectResults(tree)
+
+
+
+	
+
+

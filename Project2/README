@@ -1,0 +1,143 @@
+COS 472/572: Artificial Intelligence and Data Mining
+University of Southern Maine, Fall 2011
+Project 2: Decision Trees
+Due Monday, October 3; 100 points (intermediate deadlines as homework)
+ 
+
+You should work with a partner on this project. You will both receive the same grade (and will receive the same penalties or use the same number of grace days for being late). Please submit only one copy of the assignment -- not one for each partner.
+
+Intermediate deadlines as homework:
+
+    * Part 1 is due Monday, September 26, 10 points
+    * Part 2 is due Wednesday, September 28, 10 points 
+
+
+Note that Lab 3 is related to the work you will need to do here, so I suggest that you finish that before diving into this project
+
+Description: Turn your Project 1 into a binary decision tree system.
+
+Your complete program should:
+
+   1. Read the training data from the specified input file into a linked list in the root node of the tree.
+   2. Use information gain to determine which attribute-value pair to split on (to split on the highest information gain).
+         1. Build up a structure similar to that used in Project 1 for determining which attribute-value pairs exist.
+         2. Use good function decomposition to calculate information gain, so that it will be straightforward to alter the function used to determine the split.
+         3. Remember not to use the class attribute (the one we are trying to predict) for splitting.
+   3. Split the linked list into two sublists, according to the attribute-value pair chosen above. Create right and left offspring nodes, one with each of the linked lists. (There is no need to retain a copy of the linked list in the parent node.) Record the attribute-value you split on in the parent node.
+   4. Recurse with each offspring node. The stopping criteria is one of the following:
+         1. That all the examples in the node are the same class (e.g., they are all poisonous mushrooms or they are all edible mushrooms).
+         2. There are no attribute-value pairs left to split on. (See note below.)
+   5. Record in each leaf node the predominant class of the examples in the leaf node. (For our datasets at this point, the examples should be all one class when the recursion terminates. But this is not necessarily the case.)
+   6. Print out the tree, including the attribute-values for each split and the number of positive and negative examples at each leaf node.
+
+   7. Free the memory for the linked lists at the leaf nodes. (At this point, you have saved the generalization of the data -- the tree -- but no longer have the information about the specific examples that formed the tree.)
+   8. Read the testing data from the specified input file into a linked list in the root node.
+   9. Using the attribute-value pair that distinguishes the left offspring from the right, split the linked lists into sublists, one for each offspring node.
+  10. Recurse with each offspring node; the stopping criteria is reaching a leaf node.
+  11. At the end of the recursion, the testing data has been filtered down to the leaf nodes, and each leaf node has stored (from the training data) the class of the examples that should be there. Print out the number and percentage of correctly classified examples of each class, and the overall percentage of correctly classified examples.
+
+
+Notes:
+
+   1. If you run out of attribute-value pairs to split on, (absent a bug) it means that you have "ambiguous data". That is, data for which there are two examples that are labelled as two different classes but are identical in all other attribute-values. It's easy enough to know that this has happened when you build your tree, though more complicated to determine what to do about it. You should issue a warning message, label the node as either class, and continue.
+   2. Alas, it is impossible to check output for algorithm correctness unless we all build our trees the same way. (Because sometimes there are ties when we consider what attribute-value pair to split on.) I am assuming that:
+         1. You built your linked list of data by adding to the front
+         2. You built your "stats" array for Part 3 of Project 1 as described in the handout and in class (values are in the order they are seen from traversing the linked list of data)
+         3. When searching for the best split, you search through the candidates in attribute order and then in the order of the linked list
+         4. To resolve ties for "best", you use the first one seen at that score.
+
+
+Format of the datasets (the input files)
+
+You can assume that the datasets (both training and testing data) will be formatted using the same conventions as Project 1. The number of attributes and number of lines to read will be written at the top of the file, there will be one example per line of the file, and the attributes will be comma-separated characters within the line.
+
+Format of the output files
+
+Your program no longer needs to print out the reformatted data nor the summary of the attribute-values in the data. Instead, your program will print out:
+
+   1. The tree formed during the training process.
+   2. A summary of the testing process.
+
+
+To print as a tree, indent 2 spaces deeper for each level of the tree. The interior nodes (including the root) should print out the attribute-value pair that the node splits on, plus a count of the number of examples at that node. The leaf nodes should include counts of the number of positive and negative examples that are described by that rule. For example, your output might look like this (on the right; on the left is an illustration of the tree):
+
+Split on: attr  1 value  o (count 14)
+  Leaf: class is  p          count 4
+  Split on: attr  1 value  s (count 10)
+    Split on: attr  3 value  h (count 5)
+      Leaf: class is  p         count 2
+      Leaf: class is  n         count 3
+    Split on: attr  4 value  t (count 5)
+      Leaf: class is  p         count 3
+      Leaf: class is  n         count 2
+
+	tree
+
+(Note: The above is the binary equivalent of the non-binary tree illustrated in Figure 2 of the Quinlan paper. Your tree on the same data will likely be more complex.)
+
+Your program should also report on the number of examples in the training data, the number of rules in the tree (leaf nodes), and the average number of examples per rule. Your program should also report on the numbers and percentages of the testing data that is classified correctly.
+
+For example, your program might print out the following:
+
+There are 14 examples in the training data.
+There are 5 rules in the decision tree.
+There is an average of 2.8 examples per rule.
+100.0 percent of n examples were classified correctly (5/5)
+100.0 percent of p examples were classified correctly (9/9)
+100.0 percent of all the data were classified correctly (14/14)
+
+(Note: The above example was generated by using the training data as the testing data, so we expect to see predictions that are 100% correct.)
+
+Other notes
+
+   1. Your program should use good programming style, including good function decomposition, correct indentation, and commenting. Follow the style guidelines handed out in class and illustrated in the example programs.
+   2. You should add both a command-line argument and a user prompt to get the name of the testing data (as opposed to the training data). For example, the program might be called like this:
+
+        dt -train mush-train-1 -test mush-test-1 -out mush.out     
+
+      Please use the same flags as above, so that that I know how to run your program.
+
+
+Suggestions
+
+   1. Design your program in pseudocode before you start coding.
+   2. Make sure that you understand the data structures you are trying to encode before you try to code them.
+   3. Set yourself incremental goals -- don't try to get the whole thing working at once. It will be way too hard to debug.
+
+
+
+ 
+To Turn In
+Part 1, due Monday, September 26: construct the tree (with training data)
+
+This counts as homework, and will be decremented one point (10%) per day late.
+
+Implement through step 4 of the program, but:
+
+    * Instead of using information gain as the function, you may use any splitting function; choose one that's simple to implement (for example, the next possible attribute). You should call a function to determine your splitting attribute and value, so that this facet of your program can be easily modified down the road.
+    * Print out the class of each leaf node. This doesn't have to be nicely formatted or anything (maybe one leaf/line, w/o indentaion), but just some feedback about what's happened.
+
+
+Turn in an electronic copy of your program; include brief comments in the header of your program describing what your program does at this point, so that I know what I'm looking at. (Your program does not otherwise need to be well commented -- the point is to demonstrate tangible progress.)
+
+Part 2, due Wednesday, September 28: fix the splitting criteria and printing
+
+Implement through step 6 of the program:
+
+    * Fix the splitting criteria to implement information gain. (But keep your eye on Project 3, so that you can specify alternate splitting criteria.)
+    * Print the entire tree formed from the training process, as described on page 2 of this handout. 
+
+
+Turn in an electronic copy of your program; include brief comments in the header of your program describing what your program does at this point, so that I know what I'm looking at. (Your program does not otherwise need to be well commented -- the point is to demonstrate tangible progress.)
+
+Full program, due Monday, October 3
+
+There will be a new data set, split into training and testing data. For the completed program, you will run your program on the testing and training split, and submit the output of these runs along with your program.
+
+   1. A hardcopy of your program. Please print using enscript -2r.
+   2. A hardcopy of your output file. Please print using enscript -2r.
+   3. An electronic copy of your program and output, in the class drop box. Please create a directory named P2Lastname1Lastname2 and submit your directory using Clare's dropbox script (~congdon/bin/dropbox). 
+
+
+ 
+Maintained by: Clare Bates Congdon (congdon@usm.maine.edu) 
